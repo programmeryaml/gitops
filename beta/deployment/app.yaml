@@ -2,23 +2,20 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: nginx
+  namespace: argocd  # Ensure you specify the namespace where ArgoCD is installed
 spec:
-  project: alpha
+  project: beta
   source:
-    - repoURL: 'https://helm.github.io/examples'
-      targetRevision: main
-      helm:
-        valueFiles:
-        - $alpha/chart/values.yaml
-    - repoURL: "https://github.com/programmeryaml/gitops.git"
-      targetRevision: main
-      ref: values
+    repoURL: 'https://charts.bitnami.com/bitnami'  # Bitnami repository for Nginx
+    targetRevision: main  # Use the appropriate version or branch
+    chart: nginx  # Specify the chart name
+    helm:
+      valueFiles:
+        - beta/chart/values.yaml  # Path to your custom values file
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: alpha
+    namespace: beta  # Specify the target namespace for deployment
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
