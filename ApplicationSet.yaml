@@ -21,7 +21,7 @@ spec:
       source:
         repoURL: https://github.com/programmeryaml/gitops.git
         targetRevision: HEAD
-        path: '{{.cluster}}'
+        path: '{{.cluster}}/deployment'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{.cluster}}'
