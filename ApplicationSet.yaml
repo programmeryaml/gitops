@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: example
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - environment: staging
+        name: alpha
+      - environment: production
+        name: alpha
+  template:
+    metadata:
+      name: '{{.name}}-'
+    spec:
+      project: '{{.name}}'
+      source:
+        repoURL: https://github.com/programmeryaml/gitops.git
+        targetRevision: HEAD
+        path: '{{.environment}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
